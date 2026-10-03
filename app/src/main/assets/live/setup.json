@@ -1,0 +1,171 @@
+{
+  "model": "models/gemini-3.8-live",
+  "generationConfig": {
+    "responseModalities": [
+      "AUDIO"
+    ],
+    "speechConfig": {
+      "voiceConfig": {
+        "prebuiltVoiceConfig": {
+          "voiceName": "Puck"
+        }
+      }
+    }
+  },
+  "realtimeInputConfig": {
+    "automaticActivityDetection": {
+      "disabled": false,
+      "startOfSpeechSensitivity": "START_SENSITIVITY_LOW",
+      "endOfSpeechSensitivity": "END_SENSITIVITY_LOW",
+      "prefixPaddingMs": 200,
+      "silenceDurationMs": 1000
+    }
+  },
+  "inputAudioTranscription": {},
+  "outputAudioTranscription": {},
+  "sessionResumption": {},
+  "tools": [
+    {
+      "functionDeclarations": [
+        {
+          "name": "get_screen_state",
+          "description": "Inspects the current foreground Android screen and returns visible interactive elements, labels, and package name.",
+          "behavior": "BLOCKING"
+        },
+        {
+          "name": "tap_element",
+          "description": "Taps an element on the screen by its unique numeric element ID.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "element_id": {
+                "type": "INTEGER",
+                "description": "The unique integer ID of the element to tap"
+              }
+            },
+            "required": [
+              "element_id"
+            ]
+          }
+        },
+        {
+          "name": "scroll_screen",
+          "description": "Scrolls the current screen forward (down) or backward (up).",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "direction": {
+                "type": "STRING",
+                "enum": [
+                  "FORWARD",
+                  "BACKWARD"
+                ],
+                "description": "Direction to scroll: 'FORWARD' or 'BACKWARD'"
+              }
+            },
+            "required": [
+              "direction"
+            ]
+          }
+        },
+        {
+          "name": "press_system_button",
+          "description": "Presses an Android system navigation button: 'BACK', 'HOME', or 'RECENTS'.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "button": {
+                "type": "STRING",
+                "enum": [
+                  "BACK",
+                  "HOME",
+                  "RECENTS"
+                ],
+                "description": "System button: 'BACK', 'HOME', or 'RECENTS'"
+              }
+            },
+            "required": [
+              "button"
+            ]
+          }
+        },
+        {
+          "name": "open_app",
+          "description": "Launches an application by package name or common app name.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "package_name": {
+                "type": "STRING",
+                "description": "The application package name or name to launch"
+              }
+            },
+            "required": [
+              "package_name"
+            ]
+          }
+        },
+        {
+          "name": "open_settings_page",
+          "description": "Opens a specific Android system settings page.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "action": {
+                "type": "STRING",
+                "description": "Settings action, e.g. 'wifi', 'bluetooth', 'accessibility', 'display', 'sound'"
+              }
+            },
+            "required": [
+              "action"
+            ]
+          }
+        },
+        {
+          "name": "request_confirmation",
+          "description": "Explicitly requests user confirmation via the high-contrast green tick / red cross overlay before high-stakes actions.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "reason": {
+                "type": "STRING",
+                "description": "Brief explanation of why confirmation is requested"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        },
+        {
+          "name": "request_human_help",
+          "description": "Hands off control to a human helper when a sensitive financial app, password, OTP, or unresolvable screen is encountered.",
+          "behavior": "BLOCKING",
+          "parameters": {
+            "type": "OBJECT",
+            "properties": {
+              "reason": {
+                "type": "STRING",
+                "description": "Safety reason code or explanation"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          }
+        },
+        {
+          "name": "finish_task",
+          "description": "Signals that the user's requested voice task has been successfully completed or ended.",
+          "behavior": "BLOCKING"
+        }
+      ]
+    }
+  ]
+}

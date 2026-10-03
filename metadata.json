@@ -1,0 +1,6 @@
+{
+  "name": "AWAZ - Voice-First Android Accessibility Assistant",
+  "description": "Native Android & Accessibility Service foundation for elderly, rural, and non-literate users with zero-text UI, strict PolicyEngine safety, and gesture automation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

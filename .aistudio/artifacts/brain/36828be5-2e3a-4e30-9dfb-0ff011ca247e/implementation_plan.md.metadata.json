@@ -1,0 +1,6 @@
+{
+  "summary": "Comprehensive architecture and implementation plan for native Android app AWAZ (com.awaz.app) in Kotlin, Jetpack Compose, and Material 3 with zero-text release UI, pure Kotlin PolicyEngine with full JUnit tests, split product flavors (standard & a11yTool), AwazAccessibilityService, ConfirmationOverlay, and VoiceForegroundService.",
+  "updatedAt": "2026-09-29T20:30:53.266493274Z",
+  "requestFeedback": true,
+  "userFacing": true
+}
