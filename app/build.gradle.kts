@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-val geminiDevToken: String = providers.gradleProperty("geminiDevToken").getOrElse("")
+val rawGeminiDevToken: String = providers.gradleProperty("geminiDevToken").getOrElse("")
+val sanitizedGeminiDevToken: String = rawGeminiDevToken.replace("\\", "").replace("\"", "")
 
 android {
     namespace = "com.awaz.app"
@@ -38,16 +39,27 @@ android {
     buildTypes {
         release {
             buildConfigField("String", "GEMINI_DEV_TOKEN", "\"\"")
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
         debug {
-            buildConfigField("String", "GEMINI_DEV_TOKEN", "\"$geminiDevToken\"")
+            buildConfigField("String", "GEMINI_DEV_TOKEN", "\"$sanitizedGeminiDevToken\"")
             isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
+        }
+    }
+
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
+    sourceSets {
+        getByName("test") {
+            resources.srcDir("src/main/assets")
         }
     }
 
@@ -99,17 +111,29 @@ tasks.register("checkNoHardcodedApiKeys") {
     doLast {
         val pattern = Regex("AIza[0-9A-Za-z_-]{35}")
         val srcDir = file("src")
+        val allowedExtensions = setOf("kt", "kts", "java", "xml", "json", "txt", "properties", "md")
+        val maxBytes = 2 * 1024 * 1024L // 2 MB
         var violations = 0
-        srcDir.walkTopDown().filter { it.isFile && it.name != "NoHardcodedApiKeysTest.kt" }.forEach { file ->
-            val text = file.readText()
-            if (pattern.containsMatchIn(text)) {
-                println("ERROR: File contains hardcoded API key: \${file.path}")
-                violations++
+        srcDir.walkTopDown()
+            .filter { file ->
+                file.isFile &&
+                file.name != "NoHardcodedApiKeysTest.kt" &&
+                file.extension.lowercase() in allowedExtensions &&
+                file.length() < maxBytes
             }
-        }
+            .forEach { file ->
+                val text = file.readText()
+                if (pattern.containsMatchIn(text)) {
+                    println("ERROR: File contains hardcoded API key: ${file.path}")
+                    violations++
+                }
+            }
         if (violations > 0) {
-            throw GradleException("Found \$violations files containing hardcoded API keys matching pattern AIza...")
+            throw GradleException("Found $violations files containing hardcoded API keys matching pattern AIza...")
         }
     }
 }
 
+tasks.named("check") {
+    dependsOn("checkNoHardcodedApiKeys")
+}

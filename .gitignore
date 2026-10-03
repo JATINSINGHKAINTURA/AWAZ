@@ -4,5 +4,17 @@ dist/
 coverage/
 .DS_Store
 *.log
+.aistudio/
+.env
+.env.*
 .env*
 !.env.example
+
+# Android build and local files
+local.properties
+*.jks
+*.keystore
+/build
+/app/build
+.gradle/
+.idea/

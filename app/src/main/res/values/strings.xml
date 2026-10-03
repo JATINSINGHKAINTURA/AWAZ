@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AWAZ</string>
+    <string name="accessibility_service_label">AWAZ Assistant</string>
+    <string name="a11y_description">AWAZ Voice Accessibility Assistant helps elderly and rural users operate apps via speech.</string>
+    <string name="notification_channel_name">AWAZ Voice Assistant</string>
+    <string name="notification_channel_desc">AWAZ voice assistant is ready</string>
+</resources>
